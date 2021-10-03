@@ -23,8 +23,6 @@
 #define MANUFACTURER Bastard Keyboards
 #define PRODUCT Scylla
 
-#define MASTER_LEFT
-
 #define MATRIX_ROWS 10
 #define MATRIX_COLS 6
 #define DIODE_DIRECTION ROW2COL
@@ -38,6 +36,7 @@
 #define RGBLIGHT_ANIMATIONS
 #define DEBOUNCE 5
 #define SOFT_SERIAL_PIN D0
+#define MASTER_LEFT
 
 #ifdef RGBLIGHT_ENABLE
 #   define RGBLED_NUM 58
