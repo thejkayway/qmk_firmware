@@ -26,18 +26,20 @@
 #define MATRIX_ROWS 10
 #define MATRIX_COLS 6
 #define DIODE_DIRECTION COL2ROW
-#define MATRIX_ROW_PINS { F6, F7, B5, D7, B6 }
+
+#define MASTER_LEFT
 #define MATRIX_COL_PINS { B4, E6, C6, B1, B3, B2 } // Left hand
-//#define MATRIX_COL_PINS { B2, B3, B1, C6, E6, B4 } // Right hand
+#define MATRIX_COL_PINS_RIGHT { B2, B3, B1, C6, E6, B4 } // Right hand
+#define MATRIX_ROW_PINS { F6, F7, B5, D7, B6 }
 
 #define RGB_DI_PIN D2
 #define RGBLED_NUM 58
 #define RGBLED_SPLIT { 29, 29 }
 #define RGBLIGHT_LIMIT_VAL 120
 #define RGBLIGHT_ANIMATIONS
+#define RGBLIGHT_SLEEP
 #define DEBOUNCE 5
 #define SOFT_SERIAL_PIN D0
-#define MASTER_LEFT
 
 #ifdef RGBLIGHT_ENABLE
 #   define RGBLED_NUM 58
