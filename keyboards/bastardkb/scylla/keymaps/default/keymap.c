@@ -23,93 +23,6 @@ enum layer_names {
   _SYSTEM
 };
 
-// LED Indices - Extra Layer
-int ARROW_INDICES[] = { 5, 9, 10, 13, 34, 38, 39, 42 };
-int EXTRA_COMMON_INDICES[] = { 23, 31, 35, 51 };
-int BRIGHTNESS_INDICES[] = { 15, 19 };
-int MEDIA_INDICES[] = { 3, 32, 36 };
-int VOLUME_INDICES[] = { 40, 44, 48 };
-int EXTRA_LAYER_UNUSED_INDICES[] = { 0, 1, 2, 4, 6, 7, 8, \
-                            11, 12, 14, 16, 17, 18, \
-                            20, 21, 22, 24, 25, 26, 27, 28, 29, \
-                            30, 33, 37, \
-                            41, 43, 45, 46, 47, 49, \
-                            50, 52, 53, 54, 55, 56, 57, 58 };
-
-// LED Indices - System Layer
-int CURSOR_INDICES[] = { 5, 9, 10, 13 };
-int SCROLL_INDICES[] = { 34, 38, 39, 42 };
-int CLICK_INDICES[] = { 6, 14, 35, 43 };
-int RGB_INDICES[] = { 16, 18, 20, 21, 22 };
-int FUNCTION_INDICES[] = { 3, 7, 11, 15, 19, 32, 36, 40, 44, 48 };
-int SYSTEM_LAYER_UNUSED_INDICES[] = { 0, 1, 2, 4, 8, \
-                            12, 17, \
-                            24, 25, 26, 27, 28, 29, \
-                            30, 31, 33, 37, \
-                            41, 45, 46, 47, 49, \
-                            50, 51, 53, 54, 55, 56, 57, 58 };
-int RESET_INDEX = 23;
-int SLEEP_INDEX = 52;
-
-// Find sizes of the arrays using a method described here: https://www.geeksforgeeks.org/how-to-find-size-of-array-in-cc-without-using-sizeof-operator/
-int ARROW_INDICES_SIZE = *(&ARROW_INDICES + 1) - ARROW_INDICES;
-int EXTRA_COMMON_INDICES_SIZE = *(&EXTRA_COMMON_INDICES + 1) - EXTRA_COMMON_INDICES;
-int BRIGHTNESS_INDICES_SIZE = *(&BRIGHTNESS_INDICES + 1) - BRIGHTNESS_INDICES;
-int MEDIA_INDICES_SIZE = *(&MEDIA_INDICES + 1) - MEDIA_INDICES;
-int VOLUME_INDICES_SIZE = *(&VOLUME_INDICES + 1) - VOLUME_INDICES;
-int EXTRA_LAYER_UNUSED_INDICES_SIZE = *(&EXTRA_LAYER_UNUSED_INDICES + 1) - EXTRA_LAYER_UNUSED_INDICES;
-int CURSOR_INDICES_SIZE = *(&CURSOR_INDICES + 1) - CURSOR_INDICES;
-int SCROLL_INDICES_SIZE = *(&SCROLL_INDICES + 1) - SCROLL_INDICES;
-int CLICK_INDICES_SIZE = *(&CLICK_INDICES + 1) - CLICK_INDICES;
-int RGB_INDICES_SIZE = *(&RGB_INDICES + 1) - RGB_INDICES;
-int FUNCTION_INDICES_SIZE = *(&FUNCTION_INDICES + 1) - FUNCTION_INDICES;
-int SYSTEM_LAYER_UNUSED_INDICES_SIZE = *(&SYSTEM_LAYER_UNUSED_INDICES + 1) - SYSTEM_LAYER_UNUSED_INDICES;
-
-void set_colors_on_indices(int *indices, int array_size, int h, int s, int v) {
-  HSV hsv = {h, s, v};
-  if (hsv.v > rgb_matrix_get_val()) {
-        hsv.v = rgb_matrix_get_val();
-  }
-  RGB rgb = hsv_to_rgb(hsv);
-  for (int i = 0; i < array_size; i++) { 
-    rgb_matrix_set_color(indices[i], rgb.r, rgb.g, rgb.b);
-  }
-}
-
-void set_color_on_index(int index, int h, int s, int v) {
-  HSV hsv = {h, s, v};
-  if (hsv.v > rgb_matrix_get_val()) {
-        hsv.v = rgb_matrix_get_val();
-  }
-  RGB rgb = hsv_to_rgb(hsv);
-  rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
-}
-
-void rgb_matrix_indicators_user(void) {
-  if (rgb_matrix_is_enabled()) {
-    switch (get_highest_layer(layer_state)) {
-      case _EXTRA:
-        set_colors_on_indices(ARROW_INDICES, ARROW_INDICES_SIZE, HSV_CHARTREUSE);
-        set_colors_on_indices(EXTRA_COMMON_INDICES, EXTRA_COMMON_INDICES_SIZE, HSV_TURQUOISE);
-        set_colors_on_indices(BRIGHTNESS_INDICES, BRIGHTNESS_INDICES_SIZE, HSV_YELLOW);
-        set_colors_on_indices(MEDIA_INDICES, MEDIA_INDICES_SIZE, HSV_ORANGE);
-        set_colors_on_indices(VOLUME_INDICES, VOLUME_INDICES_SIZE, HSV_MAGENTA);
-        set_colors_on_indices(EXTRA_LAYER_UNUSED_INDICES, EXTRA_LAYER_UNUSED_INDICES_SIZE, HSV_OFF);
-        break;
-      case _SYSTEM:
-        set_colors_on_indices(CURSOR_INDICES, CURSOR_INDICES_SIZE, HSV_MAGENTA);
-        set_colors_on_indices(SCROLL_INDICES, SCROLL_INDICES_SIZE, HSV_CHARTREUSE);
-        set_colors_on_indices(CLICK_INDICES, CLICK_INDICES_SIZE, HSV_TURQUOISE);
-        set_colors_on_indices(RGB_INDICES, RGB_INDICES_SIZE, HSV_ORANGE);
-        set_colors_on_indices(FUNCTION_INDICES, FUNCTION_INDICES_SIZE, HSV_CORAL);
-        set_colors_on_indices(SYSTEM_LAYER_UNUSED_INDICES, SYSTEM_LAYER_UNUSED_INDICES_SIZE, HSV_OFF);
-        set_color_on_index(RESET_INDEX, HSV_RED);
-        set_color_on_index(SLEEP_INDEX, HSV_WHITE);
-        break;
-    }
-  }
-}
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QWERTY] = LAYOUT_split_4x6_5(
@@ -193,3 +106,90 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         KC_SPC,   KC_TRNS,        KC_ROPT,  KC_ENT
   ),
 };
+
+#ifdef RGB_MATRIX_ENABLE
+// LED Indices - Extra Layer
+int ARROW_INDICES[] = { 5, 9, 10, 13, 34, 38, 39, 42 };
+int EXTRA_COMMON_INDICES[] = { 23, 31, 35, 51 };
+int BRIGHTNESS_INDICES[] = { 15, 19 };
+int MEDIA_INDICES[] = { 3, 32, 36 };
+int VOLUME_INDICES[] = { 40, 44, 48 };
+int EXTRA_LAYER_UNUSED_INDICES[] = { 0, 1, 2, 4, 6, 7, 8, \
+                            11, 12, 14, 16, 17, 18, \
+                            20, 21, 22, 24, 25, 26, 27, 28, 29, \
+                            30, 33, 37, \
+                            41, 43, 45, 46, 47, 49, \
+                            50, 52, 53, 54, 55, 56, 57, 58 };
+
+// LED Indices - System Layer
+int CURSOR_INDICES[] = { 5, 9, 10, 13 };
+int SCROLL_INDICES[] = { 34, 38, 39, 42 };
+int CLICK_INDICES[] = { 6, 14, 35, 43 };
+int RGB_INDICES[] = { 16, 18, 20, 21, 22 };
+int FUNCTION_INDICES[] = { 3, 7, 11, 15, 19, 32, 36, 40, 44, 48 };
+int SYSTEM_LAYER_UNUSED_INDICES[] = { 0, 1, 2, 4, 8, \
+                            12, 17, \
+                            24, 25, 26, 27, 28, 29, \
+                            30, 31, 33, 37, \
+                            41, 45, 46, 47, 49, \
+                            50, 51, 53, 54, 55, 56, 57, 58 };
+int RESET_INDEX = 23;
+int SLEEP_INDEX = 52;
+
+// Find sizes of the arrays using a method described here: https://www.geeksforgeeks.org/how-to-find-size-of-array-in-cc-without-using-sizeof-operator/
+int ARROW_INDICES_SIZE = *(&ARROW_INDICES + 1) - ARROW_INDICES;
+int EXTRA_COMMON_INDICES_SIZE = *(&EXTRA_COMMON_INDICES + 1) - EXTRA_COMMON_INDICES;
+int BRIGHTNESS_INDICES_SIZE = *(&BRIGHTNESS_INDICES + 1) - BRIGHTNESS_INDICES;
+int MEDIA_INDICES_SIZE = *(&MEDIA_INDICES + 1) - MEDIA_INDICES;
+int VOLUME_INDICES_SIZE = *(&VOLUME_INDICES + 1) - VOLUME_INDICES;
+int EXTRA_LAYER_UNUSED_INDICES_SIZE = *(&EXTRA_LAYER_UNUSED_INDICES + 1) - EXTRA_LAYER_UNUSED_INDICES;
+int CURSOR_INDICES_SIZE = *(&CURSOR_INDICES + 1) - CURSOR_INDICES;
+int SCROLL_INDICES_SIZE = *(&SCROLL_INDICES + 1) - SCROLL_INDICES;
+int CLICK_INDICES_SIZE = *(&CLICK_INDICES + 1) - CLICK_INDICES;
+int RGB_INDICES_SIZE = *(&RGB_INDICES + 1) - RGB_INDICES;
+int FUNCTION_INDICES_SIZE = *(&FUNCTION_INDICES + 1) - FUNCTION_INDICES;
+int SYSTEM_LAYER_UNUSED_INDICES_SIZE = *(&SYSTEM_LAYER_UNUSED_INDICES + 1) - SYSTEM_LAYER_UNUSED_INDICES;
+
+void set_colors_on_indices(int *indices, int array_size, int h, int s, int v) {
+  HSV hsv = {h, s, v};
+  if (hsv.v > rgb_matrix_get_val()) {
+        hsv.v = rgb_matrix_get_val();
+  }
+  RGB rgb = hsv_to_rgb(hsv);
+  for (int i = 0; i < array_size; i++) { 
+    rgb_matrix_set_color(indices[i], rgb.r, rgb.g, rgb.b);
+  }
+}
+
+void set_color_on_index(int index, int h, int s, int v) {
+  HSV hsv = {h, s, v};
+  if (hsv.v > rgb_matrix_get_val()) {
+        hsv.v = rgb_matrix_get_val();
+  }
+  RGB rgb = hsv_to_rgb(hsv);
+  rgb_matrix_set_color(index, rgb.r, rgb.g, rgb.b);
+}
+
+void rgb_matrix_indicators_user(void) {
+  switch (get_highest_layer(layer_state)) {
+    case _EXTRA:
+      set_colors_on_indices(ARROW_INDICES, ARROW_INDICES_SIZE, HSV_CHARTREUSE);
+      set_colors_on_indices(EXTRA_COMMON_INDICES, EXTRA_COMMON_INDICES_SIZE, HSV_TURQUOISE);
+      set_colors_on_indices(BRIGHTNESS_INDICES, BRIGHTNESS_INDICES_SIZE, HSV_YELLOW);
+      set_colors_on_indices(MEDIA_INDICES, MEDIA_INDICES_SIZE, HSV_ORANGE);
+      set_colors_on_indices(VOLUME_INDICES, VOLUME_INDICES_SIZE, HSV_MAGENTA);
+      set_colors_on_indices(EXTRA_LAYER_UNUSED_INDICES, EXTRA_LAYER_UNUSED_INDICES_SIZE, HSV_OFF);
+      break;
+    case _SYSTEM:
+      set_colors_on_indices(CURSOR_INDICES, CURSOR_INDICES_SIZE, HSV_MAGENTA);
+      set_colors_on_indices(SCROLL_INDICES, SCROLL_INDICES_SIZE, HSV_CHARTREUSE);
+      set_colors_on_indices(CLICK_INDICES, CLICK_INDICES_SIZE, HSV_TURQUOISE);
+      set_colors_on_indices(RGB_INDICES, RGB_INDICES_SIZE, HSV_ORANGE);
+      set_colors_on_indices(FUNCTION_INDICES, FUNCTION_INDICES_SIZE, HSV_CORAL);
+      set_colors_on_indices(SYSTEM_LAYER_UNUSED_INDICES, SYSTEM_LAYER_UNUSED_INDICES_SIZE, HSV_OFF);
+      set_color_on_index(RESET_INDEX, HSV_RED);
+      set_color_on_index(SLEEP_INDEX, HSV_WHITE);
+      break;
+  }
+}
+#endif
