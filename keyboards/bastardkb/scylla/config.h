@@ -51,6 +51,7 @@
 // RGB matrix support
 #ifdef RGB_MATRIX_ENABLE
 #    define SPLIT_TRANSPORT_MIRROR
+#    define SPLIT_LAYER_STATE_ENABLE
 #    define DRIVER_LED_TOTAL 58 // Number of LEDs
 #    define RGB_MATRIX_SPLIT { 29, 29 }
 #    define RGB_MATRIX_MAXIMUM_BRIGHTNESS 50
